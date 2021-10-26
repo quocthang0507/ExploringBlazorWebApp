@@ -1,0 +1,53 @@
+﻿@page "/calculator"
+
+<h1>Calculator</h1>
+
+<div class="card">
+	<div class="card-header">
+		<h2>Mortage Payment Calculator</h2>
+	</div>
+	<div class="card-body">
+		<div class="form-group">
+			<label for="enterPrinciple">Principle Amount</label>
+			<input id="enterPrinciple" class="form-control" aria-describedby="enterPrincipleHelp" placeholder="Enter Principle" @bind="@p" />
+			<small id="enterPrincipleHelp" class="form-text text-muted">Enter the princple amount. e.g. 100000</small>
+		</div>
+		<div class="form-group">
+			<label for="enterInterest">Interest Rate</label>
+			<input id="enterInterest" class="form-control" aria-describedby="enterInterestHelp" placeholder="Enter the interest rate" @bind="@r" />
+			<small id="enterInterestHelp" class="form-text text-muted">Enter the interest rate. e.g.  3.75</small>
+		</div>
+		<div class="form-group">
+			<label for="enterDuration">Term (Years)</label>
+			<select class="form-control" aria-describedby="enterDurationHelp" id="enterDuration" @bind="@y">
+				@for (int i = 1; i <= 30; i++)
+				{
+					<option>@i</option>
+				}
+			</select>
+			<small id="enterDurationHelp" class="form-text text-muted">Select the duration of the loan (in years).</small>
+		</div>
+		<button class="btn btn-primary" @onclick="@Calculate">Calculate</button>
+		<br />
+		<br />
+		<div class="alert alert-secondary" role="alert">
+			Your monthly payment will be: <strong>$ @m.ToString("0.00")</strong>
+		</div>
+	</div>
+</div>
+
+@code {
+	double p = 100000; // principal
+	double r = 3.75; // interest rate
+	int y = 30; // number of payments
+	double m = 463.12; // monthly payment
+
+	void Calculate()
+	{
+		double rate = r / 100;
+		double monthlyRate = rate / 12;
+		double payments = 12 * y;
+
+		m = p * (monthlyRate * Math.Pow(1 + monthlyRate, payments)) / (Math.Pow(1 + monthlyRate, payments) - 1);
+	}
+}
